@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node build/index.js",
+    "dev": "nodemon ./src/index.js",
+    "build": "sucrase ./src -d ./build --transforms imports"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "date-fns": "^2.14.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mysql2": "^2.1.0",
+    "sequelize": "^6.2.2",
+    "yup": "^0.29.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "sequelize-cli": "^6.1.0",
+    "sucrase": "^3.15.0"
+  }
+}
