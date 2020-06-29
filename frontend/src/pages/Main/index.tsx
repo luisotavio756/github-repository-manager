@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FiSearch, FiGithub, FiBook, FiCircle, FiStar, FiFolder, FiUpload } from 'react-icons/fi';
+import { FiSearch, FiBook } from 'react-icons/fi';
 import { FaStar, FaNetworkWired, FaCircle } from 'react-icons/fa';
+
 
 import { Container, List } from './styles.js';
 import { Card } from '../../components/Card';
 import { Form } from '../../components/Form/index.js';
 import { Button } from '../../components/Button/index.js';
+import addNotification from '../../components/Notification';
+
 import api from '../../services/api';
 
 interface Repository {
@@ -41,22 +44,26 @@ interface PullRequest {
     created_at: Date;
 }
 
+
 const Main = () => {
-    const [ owner, setOwner ] = useState<string>('luisotavio756');
+    const [ owner, setOwner ] = useState<string>('');
     const [ repositories, setRepositories] = useState<Repository[]>([]);
-    const [ contributors, setContributors] = useState<Contributor[]>([]);
-    const [ pull_requests, setPullRequests] = useState<PullRequest[]>([]);
 
     const [ loading, setLoading] = useState(false);
 
-    function handleFindRepositories(e: HTMLFormElement) {
+    async function handleFindRepositories(e: HTMLFormElement) {
         e.preventDefault();
 
-        if(owner.length === 0)
+        if(owner.length === 0) {
+            addNotification('Plese, write user/organization', 'info');
             return;
+        }
 
         setLoading(true);
-        axios.get<Repository[]>(`https://api.github.com/users/${owner}/repos`).then(response => {
+
+        try {
+            const response = await axios.get<Repository[]>(`https://api.github.com/users/${owner}/repos`);
+
             const repos = response.data.map(repo => {
                 return {
                     id: repo.id,
@@ -75,46 +82,61 @@ const Main = () => {
 
             setRepositories(repos);
             setLoading(false);
-        })
+        } catch (error) {
+            setLoading(false);
+            addNotification('User not found', 'warning');
+        }
     }
 
     async function handleSaveRepository(data: Repository) {
-        async function loadData() {
-            const arrayContribs = await axios.get<Contributor[]>(`https://api.github.com/repos/${owner}/${data.name}/contributors`);
+        const arrayContribs = await axios.get<Contributor[]>(`https://api.github.com/repos/${owner}/${data.name}/contributors`);
 
-            const dataContribs = arrayContribs.data.map(contributor => {
-                return {
-                    login: contributor.login,
-                    avatar_url: contributor.avatar_url
-                };
+        const dataContribs = arrayContribs.data.map(contributor => {
+            return {
+                login: contributor.login,
+                avatar_url: contributor.avatar_url
+            };
+        });
+
+
+        const arrayPulls = await axios.get<PullRequest[]>(`https://api.github.com/repos/${owner}/${data.name}/pulls?per_page=3`);
+
+        const dataPulls = arrayPulls.data.map(pull => {
+            return {
+                id: pull.id,
+                title: pull.title,
+                url: pull.url,
+                body: pull.body,
+                user: pull.user.login,
+                created_at: pull.created_at
+            }
+        });
+
+        try {
+            const { name, owner, description, language, stargazers_count, forks, license, created_at } = data;
+
+            const response = await api.post('/repositories', {
+                name,
+                owner: owner.login,
+                description: description !== null ? description : '',
+                language,
+                stars: stargazers_count,
+                forks,
+                license: license !== null ? license.name : '',
+                created_at,
+                contributors: dataContribs,
+                pull_requests: dataPulls
             });
 
-            setContributors(dataContribs);
+            const updatedRepositories = repositories.filter(repo => repo.name !== name);
+
+            setRepositories(updatedRepositories);
+
+            addNotification('Success saved repository !', 'success');
+
+        } catch (error) {
+            addNotification('Error, please verify if repo not already stored !', 'danger');
         }
-
-        await loadData();
-
-        // axios.get<PullRequest[]>(`https://api.github.com/repos/${owner}/${data.name}/pulls?per_page=3`).then(response => {
-        //     const data = response.data.map(pull => {
-        //         return {
-        //             id: pull.id,
-        //             title: pull.title,
-        //             url: pull.url,
-        //             body: pull.body,
-        //             user: {
-        //                 login: pull.user.login
-        //             },
-        //             created_at: pull.created_at
-        //         }
-        //     });
-
-        //     setPullRequests(data);
-        // });
-
-
-
-            console.log(contributors);
-
 
     }
 
@@ -143,7 +165,6 @@ const Main = () => {
                     </Form>
                 </div>
             </Card>
-            { JSON.stringify(contributors) }
             {loading && <div style={{ marginTop: 20 }} className="loader-more"></div>}
             {!loading && repositories.map(item => (
                 <Card key={ item.id }>
