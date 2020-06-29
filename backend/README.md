@@ -21,10 +21,10 @@ To run this application, you'll need clone and run this steps below.
 
 ```bash
 # Clone this repository
-$ git clone https://github.com/luisotavio756/gcm-test.git
+$ git clone https://github.com/luisotavio756/github-repository-manager.git
 
 # Go into the repository
-$ cd gcm-test
+$ cd github-repository-manager/backend
 
 # Install packages
 $ yarn install or npm install
