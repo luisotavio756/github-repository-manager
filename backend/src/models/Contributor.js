@@ -3,7 +3,8 @@ import { Model, DataTypes } from 'sequelize';
 class Contributor extends Model {
     static init(sequelize) {
         super.init({
-            user: DataTypes.STRING
+            login: DataTypes.STRING,
+            avatar_url: DataTypes.STRING
         }, {
             sequelize,
             tableName: 'contributors'

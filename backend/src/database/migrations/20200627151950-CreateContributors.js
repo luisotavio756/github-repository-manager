@@ -16,9 +16,13 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      user: {
+      login: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      avatar_url: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
       created_at: {
         type: Sequelize.DATE,

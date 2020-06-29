@@ -8,7 +8,12 @@ import * as Yup from 'yup';
 
 export default {
     async index(req, res) {
-        const repositories = await Repository.findAll({
+        const { page = 1 } = req.query;
+
+        const repositories = await Repository.findAndCountAll({
+            limit: 10,
+            offset: (page - 1) * 10,
+            distinct: true,
             include: [
                 {
                     model: Contributor,
@@ -18,21 +23,24 @@ export default {
                     model: PullRequest,
                     as: 'pull_requests'
                 }
-            ]
+            ],
         });
 
-        return res.json(repositories);
+        return res.json({
+            repositories: repositories.rows,
+            total: repositories.count
+        });
     },
 
     async store(req, res) {
         const schema = Yup.object().shape({
             name: Yup.string().required(),
             owner: Yup.string().required(),
-            description: Yup.string().required(),
-            language: Yup.string().required(),
+            description: Yup.string(),
+            language: Yup.string(),
             stars: Yup.number().required(),
             forks: Yup.number().required(),
-            license: Yup.string().required(),
+            license: Yup.string(),
             created_at: Yup.string().required(),
             contributors: Yup.array(),
             pull_requests: Yup.array()
@@ -40,6 +48,17 @@ export default {
 
         if(!(await schema.isValid(req.body))) {
             return res.status(401).json({ error: 'Validation fails !'});
+        }
+
+        const checkRepository = await Repository.findOne({
+            where: {
+                name: req.body.name,
+                owner: req.body.owner
+            }
+        });
+
+        if(checkRepository) {
+            return res.status(400).json({ message: 'Repository already saved !' });
         }
         
         try {
@@ -54,8 +73,8 @@ export default {
                 req.body.contributors.map(async (contributor) => {
                     return await Contributor.create({
                         repository_id: repository_id,
-                        user: contributor.user,
-                        createdAt: contributor.created_at,
+                        login: contributor.login,
+                        avatar_url: contributor.avatar_url
                     })
                 })
             ]) 
@@ -74,12 +93,9 @@ export default {
                 })   
             ]) 
             
+            
 
-            return res.json({
-                ...repository.dataValues,
-                contributors: req.body.contributors,
-                pull_requests: req.body.pull_requests
-            });
+            return res.json(req.body);
        } catch (error) {
            return res.status(400).json(error);
        }

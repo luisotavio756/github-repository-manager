@@ -19,11 +19,11 @@ module.exports = {
       },
       description: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: true
       },
       language: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       stars: {
         type: Sequelize.INTEGER,
@@ -35,7 +35,7 @@ module.exports = {
       },
       license: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       created_at: {
         type: Sequelize.DATE,
