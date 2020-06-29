@@ -2,7 +2,7 @@
    Server from RepositoryList 
 </h1>
 <h4 align="center">
-  This project was developed only from merge concepts from Node.js + Sequelize ORM. It can list repositories from user/organization and save in database.
+  This project was developed only from merge concepts of the Node.js + Sequelize ORM. It possible list repositories from user/organization and save in database.
 </h4>
 <p align="center">
   <a href="#rocket-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
