@@ -74,7 +74,7 @@ export const Card = styled.div`
         -webkit-box-flex: 1;
         flex: 1 1 auto;
         min-height: 1px;
-        padding: 1.25rem;
+        padding: 0.75rem 1.25rem;
 
         @media screen and (max-width: 790px) {
             padding: 1.5rem .5rem;
@@ -83,6 +83,35 @@ export const Card = styled.div`
         &.light-text {
             p {
                 color: #777;
+            }
+        }
+
+        .contributors {
+            margin-top: 10px;
+
+            h5 {
+                color: #777;
+            }
+        }
+
+        .pulls {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+
+            h5 {
+                color: #777;
+            }
+
+            a {
+                font-size: 12px;
+                font-weight: 400;
+                color: #4285f4;
+                transition: all 0.2s;
+
+                &:hover {
+                    filter: brightness(60%);
+                }
             }
         }
     }
