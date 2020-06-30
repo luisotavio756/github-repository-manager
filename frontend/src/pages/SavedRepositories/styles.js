@@ -8,7 +8,7 @@ export const Container = styled.div`
     min-height: calc(100vh - 72px);
 
     margin: 0 auto;
-    padding: 40px;
+    padding: 40px 10px;
 
     .title {
         text-align: center;
