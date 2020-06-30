@@ -20,6 +20,8 @@
 
 ## :information_source: How To Use
 
+NOTE: You need update the ./services/api.ts from your API IP.
+
 ```bash
 # Clone this repository
 $ git clone https://github.com/luisotavio756/github-repository-manager.git
