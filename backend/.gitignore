@@ -4,8 +4,6 @@ build
 
 .env
 
-nodemon.json
-
 package-lock.json
 
 .vscode

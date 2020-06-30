@@ -33,10 +33,13 @@ $ yarn install or npm install
 $ yarn sequelize db:create
 
 # Run migrations
-$ yarn sequelize db:migration
+$ yarn sequelize db:migrate
+
+# Build Application with sucrase
+$ yarn build or npm run build
 
 # Run start
-$ yarn dev or npm run dev
+$ yarn start or npm run start
 
 # Enjoy!
 ```
