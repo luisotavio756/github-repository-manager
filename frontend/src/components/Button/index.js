@@ -78,6 +78,11 @@ export const Button = styled.button`
         filter: brightness(85%);
     }
 
+    &:disabled {
+        cursor: not-allowed;
+        filter: brightness(85%);
+    }
+
     svg {
         margin: 0 3px !important;
     }

@@ -1,6 +1,7 @@
 import Repository from '../models/Repository';
 import Contributor from '../models/Contributor';
 import PullRequest from '../models/PullRequest';
+
 import {
     parseISO
 } from 'date-fns';
@@ -23,6 +24,9 @@ export default {
                     model: PullRequest,
                     as: 'pull_requests'
                 }
+            ],
+            order: [
+                ['id', 'DESC']
             ],
         });
 
@@ -69,29 +73,52 @@ export default {
 
             const repository_id = repository.id;
 
-            Promise.all([
-                req.body.contributors.map(async (contributor) => {
-                    return await Contributor.create({
-                        repository_id: repository_id,
-                        login: contributor.login,
-                        avatar_url: contributor.avatar_url
-                    })
-                })
-            ]) 
+            const contributorsData = req.body.contributors.map(contributor => {
+                return {
+                    repository_id: repository_id,
+                    login: contributor.login,
+                    avatar_url: contributor.avatar_url
+                }
+            });   
             
-            Promise.all([
-                req.body.pull_requests.map(async (pull_request) => {
-                    return await PullRequest.create({
-                        id: pull_request.id,
-                        repository_id: repository_id,
-                        user: pull_request.user,
-                        url: pull_request.url,
-                        title: pull_request.title,
-                        body: pull_request.body,
-                        createdAt: pull_request.created_at,
-                    })
-                })   
-            ]) 
+            const pullRequestsData = req.body.pull_requests.map(pull_request => {
+                return {
+                    id: pull_request.id,
+                    repository_id: repository_id,
+                    user: pull_request.user,
+                    url: pull_request.url,
+                    title: pull_request.title,
+                    body: pull_request.body,
+                    createdAt: pull_request.created_at,
+                };
+            }) 
+
+            await Contributor.bulkCreate(contributorsData);
+            await PullRequest.bulkCreate(pullRequestsData);
+            
+            // Promise.all([
+            //     req.body.contributors.map(async (contributor) => {
+            //         return await Contributor.create({
+            //             repository_id: repository_id,
+            //             login: contributor.login,
+            //             avatar_url: contributor.avatar_url
+            //         })
+            //     })
+            // ]) 
+            
+            // Promise.all([
+            //     req.body.pull_requests.map(async (pull_request) => {
+            //         return await PullRequest.create({
+            //             id: pull_request.id,
+            //             repository_id: repository_id,
+            //             user: pull_request.user,
+            //             url: pull_request.url,
+            //             title: pull_request.title,
+            //             body: pull_request.body,
+            //             createdAt: pull_request.created_at,
+            //         })
+            //     })   
+            // ]) 
             
             
 

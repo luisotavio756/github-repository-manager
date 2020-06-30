@@ -50,6 +50,7 @@ const Main = () => {
     const [ repositories, setRepositories] = useState<Repository[]>([]);
 
     const [ loading, setLoading] = useState(false);
+    const [ loadingSave, setLoadingSave ] = useState(false);
 
     async function handleFindRepositories(e: HTMLFormElement) {
         e.preventDefault();
@@ -84,11 +85,12 @@ const Main = () => {
             setLoading(false);
         } catch (error) {
             setLoading(false);
-            addNotification('User not found', 'warning');
+            addNotification('User not found or Requests limit', 'warning');
         }
     }
 
     async function handleSaveRepository(data: Repository) {
+        setLoadingSave(true);
         const arrayContribs = await axios.get<Contributor[]>(`https://api.github.com/repos/${owner}/${data.name}/contributors`);
 
         const dataContribs = arrayContribs.data.map(contributor => {
@@ -133,9 +135,11 @@ const Main = () => {
             setRepositories(updatedRepositories);
 
             addNotification('Success saved repository !', 'success');
+            setLoadingSave(false);
 
         } catch (error) {
             addNotification('Error, please verify if repo not already stored !', 'danger');
+            setLoadingSave(false);
         }
 
     }
@@ -187,6 +191,7 @@ const Main = () => {
                         <Button
                             className="btn-sm danger right"
                             onClick={() => handleSaveRepository(item)}
+                            disabled={loadingSave}
                         >
                             <FiBook /> Save
                         </Button>
