@@ -2,7 +2,7 @@
    Web Application from RepositoryList
 </h1>
 <h4 align="center">
-  This project was developed only from merge concepts of the ReactJS + TypeScript. It possible list repositories from user/organization and save.
+  This project was developed only from merge concepts of the ReactJS + TypeScript. It possible list repositories from user/organization, save and destroy.
 </h4>
 <p align="center">
   <a href="#rocket-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;

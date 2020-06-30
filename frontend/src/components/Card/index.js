@@ -53,7 +53,6 @@ export const Card = styled.div`
                 margin: 0 3px;
                 cursor: pointer;
                 font-size: 12px;
-                background: #b20710;
                 padding: 8px 10px;
                 border-radius: 6px;
                 color: #fff;
@@ -65,6 +64,14 @@ export const Card = styled.div`
 
                 &:hover {
                     filter: brightness(90%);
+                }
+
+                &.trash {
+                    background: #f64e60;
+                }
+
+                &.info {
+                    background-color: #8950fc;
                 }
             }
         }

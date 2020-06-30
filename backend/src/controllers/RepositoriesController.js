@@ -126,5 +126,27 @@ export default {
        } catch (error) {
            return res.status(400).json(error);
        }
+    },
+
+    async destroy(req, res) {
+        const { id } = req.params;
+
+        const repository = await Repository.findOne({
+            where: {
+                id
+            }
+        });
+
+        if(!repository) {
+            return res.status(400).json({ message: 'Repository not found !' });
+        }
+
+        try {
+            await repository.destroy();
+
+            return res.send();
+        } catch (error) {
+            return res.status(400).json(error);
+        }
     }
 };

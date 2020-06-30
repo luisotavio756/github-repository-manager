@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FiSearch, FiBook, FiUser, FiActivity, FiGitPullRequest, FiLink, FiLoader } from 'react-icons/fi';
+import { FiSearch, FiBook, FiUser, FiActivity, FiGitPullRequest, FiLink, FiLoader, FiTrash2, FiTrash } from 'react-icons/fi';
 import { FaStar, FaNetworkWired, FaCircle, FaBookmark } from 'react-icons/fa';
 
 
@@ -71,6 +71,26 @@ const SavedRepositories = () => {
 
     }
 
+    async function handleTrashRepository(id: string) {
+        if(!window.confirm('Realy want trash this repository ?'))
+            return;
+
+        try {
+            const response = await api.delete(`/repositories/${id}`);
+
+            const updatedRepositories = repositories.filter(repo => repo.id !== id);
+
+            setRepositories(updatedRepositories);
+            setTotal(total - 1);
+            // setPageNow(1);
+            addNotification('Repository success trashed ', 'success');
+
+
+        } catch (error) {
+            addNotification('Error when deleting, plese try again', 'success');
+        }
+    }
+
     useEffect(() => {
         setLoading(true);
         handleFindRepositories();
@@ -83,11 +103,20 @@ const SavedRepositories = () => {
                 <p>Showing <span>{repositories.length}</span> from <span>{total}</span></p>
             </div>
             {loading && <div style={{ marginTop: 20 }} className="loader-more"></div>}
+            {!loading && total === 0 ? <p className="not-found">Nothing repository saved !</p> : null}
             {!loading && repositories.map(item => (
                 <Card key={ item.id }>
                     <div className="card-title">
                         <h3><FiBook /> {item.name}</h3>
-                        <a href={`https://github.com/${item.owner}/${item.name}`} target="_blank"><FiLink /></a>
+                        <div className="tools">
+                            <button
+                                className="trash"
+                                onClick={() => handleTrashRepository(item.id)}
+                                >
+                                    <FiTrash />
+                            </button>
+                            <a className="info" href={`https://github.com/${item.owner}/${item.name}`} target="_blank"><FiLink /></a>
+                        </div>
                     </div>
                     <div className="card-body light-text">
                         <p style={{ marginTop: 5 }}>{ item.description !== null && item.description !== '' ? item.description : 'No description' }</p>
@@ -116,6 +145,7 @@ const SavedRepositories = () => {
                                     </li>
                                 ))}
                             </List>
+                            { item.contributors.length === 0 ? <p>Nothing contributor</p> : null}
                         </div>
                         <div className="pulls">
                             <h5 style={{ marginTop: 10 }}>Pulls:</h5>
@@ -124,6 +154,7 @@ const SavedRepositories = () => {
                                     <FiGitPullRequest /> { pull_request.title }
                                 </a>
                             ))}
+                            { item.pull_requests.length === 0 ? <p>Nothing pulls</p> : null}
                         </div>
                         {/* <a hre></a> */}
                         {/* <Button

@@ -28,6 +28,14 @@ export const Container = styled.div`
             }
         }
     }
+
+    p.not-found {
+        margin-top: 30px;
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+        font-weight: 500;
+    }
 `;
 
 export const List = styled.ul`

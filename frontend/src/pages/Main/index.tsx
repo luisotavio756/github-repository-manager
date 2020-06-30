@@ -90,7 +90,7 @@ const Main = () => {
     }
 
     async function handleSaveRepository(data: Repository) {
-        setLoadingSave(true);
+        // setLoadingSave(true);
 
         const arrayContribs = await axios.get<Contributor[]>(`https://api.github.com/repos/${owner}/${data.name}/contributors`);
 
@@ -122,7 +122,7 @@ const Main = () => {
                 name,
                 owner: owner.login,
                 description: description !== null ? description : '',
-                language,
+                language: language !== null ? language : '',
                 stars: stargazers_count,
                 forks,
                 license: license !== null ? license.name : '',
