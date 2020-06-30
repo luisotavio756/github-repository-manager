@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FiSearch, FiBook, FiUser, FiActivity, FiGitPullRequest, FiLink } from 'react-icons/fi';
+import { FiSearch, FiBook, FiUser, FiActivity, FiGitPullRequest, FiLink, FiLoader } from 'react-icons/fi';
 import { FaStar, FaNetworkWired, FaCircle, FaBookmark } from 'react-icons/fa';
 
 
@@ -53,26 +53,34 @@ interface PullRequest {
 const SavedRepositories = () => {
     const [ repositories, setRepositories] = useState<Repository[]>([]);
     const [ loading, setLoading] = useState(false);
+    const [ total, setTotal ] = useState(0);
+    const [ pageNow, setPageNow ] = useState(1);
 
-    async function handleFindRepositories() {
+    async function handleFindRepositories(page = 1) {
 
-        setLoading(true);
+        const response = await api.get(`/repositories?page=${page}`);
 
-        const response = await api.get('/repositories');
+        setRepositories([
+            ...repositories,
+            ...response.data.repositories
+        ]);
 
-        setRepositories(response.data.repositories);
+        setTotal(response.data.total);
+        setPageNow(page);
         setLoading(false);
 
     }
 
     useEffect(() => {
+        setLoading(true);
         handleFindRepositories();
-    }, []);
+    }, []); //eslint-disable-line
 
     return (
         <Container>
             <div className="title">
                 <h1>Stored Repositories</h1>
+                <p>Showing <span>{repositories.length}</span> from <span>{total}</span></p>
             </div>
             {loading && <div style={{ marginTop: 20 }} className="loader-more"></div>}
             {!loading && repositories.map(item => (
@@ -82,7 +90,7 @@ const SavedRepositories = () => {
                         <a href={`https://github.com/${item.owner}/${item.name}`} target="_blank"><FiLink /></a>
                     </div>
                     <div className="card-body light-text">
-                        <p style={{ marginTop: 5 }}>{ (item.description) !== null ? item.description : 'No description' }</p>
+                        <p style={{ marginTop: 5 }}>{ item.description !== null && item.description !== '' ? item.description : 'No description' }</p>
                         <List style={{ marginTop: 5 }}>
                             <li>
                                 <FaCircle /> { item.language }
@@ -127,6 +135,16 @@ const SavedRepositories = () => {
                     </div>
                 </Card>
             ))}
+            {!loading && total > repositories.length ?
+                <Button
+                    className="danger btn-circle"
+                    onClick={() => handleFindRepositories(pageNow + 1)}
+                    margin="10px auto"
+                >
+                    <FiLoader /> Load more
+                </Button>
+            : null
+            }
 
         </Container>
     );

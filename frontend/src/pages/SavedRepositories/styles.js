@@ -16,6 +16,17 @@ export const Container = styled.div`
         h1 {
             color: #333;
         }
+
+        p {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+
+            span {
+                font-weight: 500;
+                color: #f64e60;
+            }
+        }
     }
 `;
 

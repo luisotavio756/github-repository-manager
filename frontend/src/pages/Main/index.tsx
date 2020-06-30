@@ -91,6 +91,7 @@ const Main = () => {
 
     async function handleSaveRepository(data: Repository) {
         setLoadingSave(true);
+
         const arrayContribs = await axios.get<Contributor[]>(`https://api.github.com/repos/${owner}/${data.name}/contributors`);
 
         const dataContribs = arrayContribs.data.map(contributor => {
