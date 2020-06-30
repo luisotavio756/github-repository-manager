@@ -90,7 +90,7 @@ const Main = () => {
     }
 
     async function handleSaveRepository(data: Repository) {
-        // setLoadingSave(true);
+        setLoadingSave(true);
 
         const arrayContribs = await axios.get<Contributor[]>(`https://api.github.com/repos/${owner}/${data.name}/contributors`);
 
@@ -190,7 +190,7 @@ const Main = () => {
                             </li>
                         </List>
                         <Button
-                            className="btn-sm danger right"
+                            className="btn-sm success right"
                             onClick={() => handleSaveRepository(item)}
                             disabled={loadingSave}
                         >

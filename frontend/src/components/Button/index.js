@@ -80,7 +80,7 @@ export const Button = styled.button`
 
     &:disabled {
         cursor: not-allowed;
-        filter: brightness(85%);
+        opacity: 0.7;
     }
 
     svg {
