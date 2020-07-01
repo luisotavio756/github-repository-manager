@@ -60,8 +60,8 @@ I left a [Insomnia file](../InsomniaRestClient.json) for API calls.
 ---
 **BODY:**
 
-    {
-	    "name": "dashboard-reacts",
+	{
+		"name": "dashboard-reacts",
 		"owner": "luisotavio756",
 		"description": "null",
 		"language": "Javascript",
@@ -69,7 +69,7 @@ I left a [Insomnia file](../InsomniaRestClient.json) for API calls.
 		"forks": 4,
 		"license": "null",
 		"created_at": "2020-05-15T13:26:15Z",
-		"contributors": []
+		"contributors": [],
 		"pull_requests": []
 	}
 	
