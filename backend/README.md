@@ -43,22 +43,21 @@ $ yarn start or npm run start
 
 # Enjoy!
 ```
-
 ## 🚖 Routes
 I left a [Insomnia file](../InsomniaRestClient.json) for API calls.
 
 |TYPE|REQUEST|RESPONSE
 |--|--|--|
 |GET|http://localhost:3333/repositories|JSON with repositories and total
-| | |
+---
 **BODY:**
 
     No Body
-
+---
 |TYPE|REQUEST|RESPONSE
 |--|--|--|
 |POST|http://localhost:3333/repositories| JSON with repositorie stored
-| | |
+---
 **BODY:**
 
     {
@@ -73,14 +72,15 @@ I left a [Insomnia file](../InsomniaRestClient.json) for API calls.
 		"contributors": []
 		"pull_requests": []
 	}
+	
+---
 |TYPE|REQUEST|RESPONSE
 |--|--|--|
 |DELETE|http://localhost:3333/repositories/:id| Response status 200
-| | |
+---
 **BODY:**
 
     No Body
-
 
 ---
 
