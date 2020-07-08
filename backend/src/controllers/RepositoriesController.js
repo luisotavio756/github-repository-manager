@@ -94,33 +94,7 @@ export default {
             }) 
 
             await Contributor.bulkCreate(contributorsData);
-            await PullRequest.bulkCreate(pullRequestsData);
-            
-            // Promise.all([
-            //     req.body.contributors.map(async (contributor) => {
-            //         return await Contributor.create({
-            //             repository_id: repository_id,
-            //             login: contributor.login,
-            //             avatar_url: contributor.avatar_url
-            //         })
-            //     })
-            // ]) 
-            
-            // Promise.all([
-            //     req.body.pull_requests.map(async (pull_request) => {
-            //         return await PullRequest.create({
-            //             id: pull_request.id,
-            //             repository_id: repository_id,
-            //             user: pull_request.user,
-            //             url: pull_request.url,
-            //             title: pull_request.title,
-            //             body: pull_request.body,
-            //             createdAt: pull_request.created_at,
-            //         })
-            //     })   
-            // ]) 
-            
-            
+            await PullRequest.bulkCreate(pullRequestsData);   
 
             return res.json(req.body);
        } catch (error) {
